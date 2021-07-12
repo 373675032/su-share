@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>发布-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="nobg">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3>新的素材</h3>
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li><a href="index">首页</a></li>
+                                    <li class="active">上传素材</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="common/bar::#common-top"></div>
+
+                <div th:replace="common/bar::#common-search"></div>
+
+                <div class="content boxs">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="widget-title">
+                                <h4>上传新的素材</h4>
+                            </div><!-- end widget-title -->
+                            <form class="uploaditem" action="publish" method="post" enctype="multipart/form-data" onsubmit="return checkNew()">
+                                <div class="space">
+                                    <label>素材分类 : </label>
+                                    <select class="selectpicker" data-live-search="true" name="kindId">
+                                        <option th:each="kind:${kinds}" th:value="${kind.id}" th:text="${kind.name}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="space">
+                                    <label>素材名称 : </label>
+                                    <input autocomplete="off" type="text" class="form-control" id="name" name="name">
+                                </div>
+
+                                <div class="space">
+                                    <label>描述(支持HTML标签) : </label>
+                                    <textarea style="resize: vertical" class="form-control" id="info" name="info"></textarea>
+                                </div>
+
+                                <div class="space">
+                                    <label>上传封面 : </label>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-preview thumbnail"></div>
+                                        <br>
+                                        <span class="btn btn-primary btn-file">
+                                            <span class="fileupload-new">选取</span>
+                                            <span class="fileupload-exists">修改</span>
+                                            <input type="file" id="face" name="face">
+                                        </span>
+                                        <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">移除</a>
+                                    </div>
+                                </div>
+
+                                <div class="space">
+                                    <label>上传预览图（最多三张） : </label>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-preview thumbnail"></div>
+                                        <br>
+                                        <span class="btn btn-primary btn-file">
+                                            <span class="fileupload-new">选取</span>
+                                            <span class="fileupload-exists">修改</span>
+                                            <input type="file" name="preview">
+                                        </span>
+                                        <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">移除</a>
+                                    </div>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-preview thumbnail"></div>
+                                        <br>
+                                        <span class="btn btn-primary btn-file">
+                                            <span class="fileupload-new">选取</span>
+                                            <span class="fileupload-exists">修改</span>
+                                            <input type="file" name="preview">
+                                        </span>
+                                        <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">移除</a>
+                                    </div>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-preview thumbnail"></div>
+                                        <br>
+                                        <span class="btn btn-primary btn-file">
+                                            <span class="fileupload-new">选取</span>
+                                            <span class="fileupload-exists">修改</span>
+                                            <input type="file" name="preview">
+                                        </span>
+                                        <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">移除</a>
+                                    </div>
+                                </div>
+
+                                <div class="space">
+                                    <label>上传源文件 (压缩包格式)</label>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-preview thumbnail"></div>
+                                        <br>
+                                        <span class="btn btn-primary btn-file">
+                                            <span class="fileupload-new">选取</span>
+                                            <span class="fileupload-exists">修改</span>
+                                            <input type="file" id="source" name="source">
+                                        </span>
+                                        <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">移除</a>
+                                    </div>
+                                </div>
+
+                                <div class="space">
+                                    <input type="submit" class="btn btn-primary btn-block" value="提交">
+                                </div>
+
+                            </form>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div>
+
+                <br>
+
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

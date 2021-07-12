@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.mapper.MessageMapper">
+
+    <!--message的映射结果集-->
+    <resultMap type="com.share.entity.Message" id="MessageMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="receiveUserId" column="receive_user_id" jdbcType="INTEGER"/>
+        <result property="sentUserId" column="sent_user_id" jdbcType="INTEGER"/>
+        <result property="sentUserImg" column="sent_user_img" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="materialId" column="material_id" jdbcType="INTEGER"/>
+        <result property="isRead" column="is_read" jdbcType="INTEGER"/>
+        <result property="messageTime" column="message_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, receive_user_id, sent_user_id, sent_user_img, content, material_id, is_read, message_time </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="receiveUserId != null">
+                receive_user_id,
+        </if>
+        <if test="sentUserId != null">
+                sent_user_id,
+        </if>
+        <if test="sentUserImg != null and sentUserImg != ''">
+                sent_user_img,
+        </if>
+        <if test="content != null and content != ''">
+                content,
+        </if>
+        <if test="materialId != null">
+                material_id,
+        </if>
+        <if test="isRead != null">
+                is_read,
+        </if>
+        <if test="messageTime != null">
+                message_time,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="receiveUserId != null">
+                #{receiveUserId},
+        </if>
+        <if test="sentUserId != null">
+                #{sentUserId},
+        </if>
+        <if test="sentUserImg != null and sentUserImg != ''">
+                #{sentUserImg},
+        </if>
+        <if test="content != null and content != ''">
+                #{content},
+        </if>
+        <if test="materialId != null">
+                #{materialId},
+        </if>
+        <if test="isRead != null">
+                #{isRead},
+        </if>
+        <if test="messageTime != null">
+                #{messageTime},
+        </if>
+    </sql>
+    
+    <!--通用对Message各个属性的值的非空判断，Insert、Update使用-->
+    <sql id="commonsValue">
+        <if test="receiveUserId != null">
+                receive_user_id = #{receiveUserId},
+        </if>
+        <if test="sentUserId != null">
+                sent_user_id = #{sentUserId},
+        </if>
+        <if test="sentUserImg != null and sentUserImg != ''">
+                sent_user_img = #{sentUserImg},
+        </if>
+        <if test="content != null and content != ''">
+                content = #{content},
+        </if>
+        <if test="materialId != null">
+                material_id = #{materialId},
+        </if>
+        <if test="isRead != null">
+                is_read = #{isRead},
+        </if>
+        <if test="messageTime != null">
+                message_time = #{messageTime},
+        </if>
+    </sql>
+    
+        <!--通用对Message各个属性的值的非空判断,Where查询使用-->
+    <sql id="commonsQuery">
+        <if test="receiveUserId != null">
+                and receive_user_id = #{receiveUserId}
+        </if>
+        <if test="sentUserId != null">
+                and sent_user_id = #{sentUserId}
+        </if>
+        <if test="sentUserImg != null and sentUserImg != ''">
+                and sent_user_img = #{sentUserImg}
+        </if>
+        <if test="content != null and content != ''">
+                and content = #{content}
+        </if>
+        <if test="materialId != null">
+                and material_id = #{materialId}
+        </if>
+        <if test="isRead != null">
+                and is_read = #{isRead}
+        </if>
+        <if test="messageTime != null">
+                and message_time = #{messageTime}
+        </if>
+    </sql>
+    
+    <!--新增message:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除message:通过主键-->
+    <delete id="deleteById">
+        delete from message
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <!--删除Message-->
+    <delete id="deleteByUserId">
+        delete from message
+        <where>
+            receive_user_id = #{uId}
+        </where>
+    </delete>
+
+    <!--查询单个message-->
+    <select id="getById" resultMap="MessageMap">
+        select
+        <include refid="allColumn"></include>
+        from message
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="listMessages" resultMap="MessageMap">
+        select
+          <include refid="allColumn"></include>
+        from message
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsQuery"></include>
+        </trim>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update message
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!--将用户全部消息设为已读-->
+    <update id="updateAllRead">
+        update message set is_read = 1
+        where receive_user_id = #{userId}
+    </update>
+
+</mapper>

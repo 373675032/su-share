@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.mapper.MaterialMapper">
+
+    <!--material的映射结果集-->
+    <resultMap type="com.share.entity.Material" id="MaterialMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="kindId" column="kind_id" jdbcType="INTEGER"/>
+        <result property="info" column="info" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+        <result property="imgs" column="imgs" jdbcType="VARCHAR"/>
+        <result property="readCount" column="read_count" jdbcType="INTEGER"/>
+        <result property="downloadCount" column="download_count" jdbcType="INTEGER"/>
+        <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+        <result property="filePath" column="file_path" jdbcType="VARCHAR"/>
+        <result property="extension" column="extension" jdbcType="VARCHAR"/>
+        <result property="size" column="size" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="isChecked" column="is_checked" jdbcType="INTEGER"/>
+        <result property="checkedInfo" column="checked_info" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, user_id, name, kind_id, info, img, imgs, read_count, download_count, publish_time, file_path, extension, size, status, is_checked, checked_info </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="userId != null">
+                user_id,
+        </if>
+        <if test="name != null and name != ''">
+                name,
+        </if>
+        <if test="kindId != null">
+                kind_id,
+        </if>
+        <if test="info != null and info != ''">
+                info,
+        </if>
+        <if test="img != null and img != ''">
+                img,
+        </if>
+        <if test="imgs != null and imgs != ''">
+                imgs,
+        </if>
+        <if test="readCount != null">
+                read_count,
+        </if>
+        <if test="downloadCount != null">
+                download_count,
+        </if>
+        <if test="publishTime != null">
+                publish_time,
+        </if>
+        <if test="filePath != null and filePath != ''">
+                file_path,
+        </if>
+        <if test="extension != null and extension != ''">
+                extension,
+        </if>
+        <if test="size != null and size != ''">
+                size,
+        </if>
+        <if test="status != null">
+                status,
+        </if>
+        <if test="isChecked != null">
+                is_checked,
+        </if>
+        <if test="checkedInfo != null and checkedInfo != ''">
+                checked_info,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="userId != null">
+                #{userId},
+        </if>
+        <if test="name != null and name != ''">
+                #{name},
+        </if>
+        <if test="kindId != null">
+                #{kindId},
+        </if>
+        <if test="info != null and info != ''">
+                #{info},
+        </if>
+        <if test="img != null and img != ''">
+                #{img},
+        </if>
+        <if test="imgs != null and imgs != ''">
+                #{imgs},
+        </if>
+        <if test="readCount != null">
+                #{readCount},
+        </if>
+        <if test="downloadCount != null">
+                #{downloadCount},
+        </if>
+        <if test="publishTime != null">
+                #{publishTime},
+        </if>
+        <if test="filePath != null and filePath != ''">
+                #{filePath},
+        </if>
+        <if test="extension != null and extension != ''">
+                #{extension},
+        </if>
+        <if test="size != null and size != ''">
+                #{size},
+        </if>
+        <if test="status != null">
+                #{status},
+        </if>
+        <if test="isChecked != null">
+                #{isChecked},
+        </if>
+        <if test="checkedInfo != null and checkedInfo != ''">
+                #{checkedInfo},
+        </if>
+    </sql>
+    
+    <!--通用对Material各个属性的值的非空判断，Insert、Update使用-->
+    <sql id="commonsValue">
+        <if test="userId != null">
+                user_id = #{userId},
+        </if>
+        <if test="name != null and name != ''">
+                name = #{name},
+        </if>
+        <if test="kindId != null">
+                kind_id = #{kindId},
+        </if>
+        <if test="info != null and info != ''">
+                info = #{info},
+        </if>
+        <if test="img != null and img != ''">
+                img = #{img},
+        </if>
+        <if test="imgs != null and imgs != ''">
+                imgs = #{imgs},
+        </if>
+        <if test="readCount != null">
+                read_count = #{readCount},
+        </if>
+        <if test="downloadCount != null">
+                download_count = #{downloadCount},
+        </if>
+        <if test="publishTime != null">
+                publish_time = #{publishTime},
+        </if>
+        <if test="filePath != null and filePath != ''">
+                file_path = #{filePath},
+        </if>
+        <if test="extension != null and extension != ''">
+                extension = #{extension},
+        </if>
+        <if test="size != null and size != ''">
+                size = #{size},
+        </if>
+        <if test="status != null">
+                status = #{status},
+        </if>
+        <if test="isChecked != null">
+                is_checked = #{isChecked},
+        </if>
+        <if test="checkedInfo != null and checkedInfo != ''">
+                checked_info = #{checkedInfo},
+        </if>
+    </sql>
+    
+        <!--通用对Material各个属性的值的非空判断,Where查询使用-->
+    <sql id="commonsQuery">
+        <if test="userId != null">
+                and user_id = #{userId}
+        </if>
+        <if test="name != null and name != ''">
+                and name = #{name}
+        </if>
+        <if test="kindId != null">
+                and kind_id = #{kindId}
+        </if>
+        <if test="info != null and info != ''">
+                and info = #{info}
+        </if>
+        <if test="img != null and img != ''">
+                and img = #{img}
+        </if>
+        <if test="imgs != null and imgs != ''">
+                and imgs = #{imgs}
+        </if>
+        <if test="readCount != null">
+                and read_count = #{readCount}
+        </if>
+        <if test="downloadCount != null">
+                and download_count = #{downloadCount}
+        </if>
+        <if test="publishTime != null">
+                and publish_time = #{publishTime}
+        </if>
+        <if test="filePath != null and filePath != ''">
+                and file_path = #{filePath}
+        </if>
+        <if test="extension != null and extension != ''">
+                and extension = #{extension}
+        </if>
+        <if test="size != null and size != ''">
+                and size = #{size}
+        </if>
+        <if test="status != null">
+                and status = #{status}
+        </if>
+        <if test="isChecked != null">
+                and is_checked = #{isChecked}
+        </if>
+        <if test="checkedInfo != null and checkedInfo != ''">
+                and checked_info = #{checkedInfo}
+        </if>
+    </sql>
+    
+    <!--新增material:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除material:通过主键-->
+    <delete id="deleteById">
+        delete from material
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+    
+    <!--查询单个material-->
+    <select id="getById" resultMap="MaterialMap">
+        select
+        <include refid="allColumn"></include>
+        from material
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="listMaterials" resultMap="MaterialMap">
+        select
+          <include refid="allColumn"></include>
+        from material
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsQuery"></include>
+        </trim>
+        order by publish_time desc
+    </select>
+
+    <!--实体作为筛选条件获得结果数量-->
+    <select id="countMaterials" resultType="java.lang.Integer">
+        select
+        count(*)
+        from material
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsQuery"></include>
+        </trim>
+        order by publish_time desc
+    </select>
+
+    <!--获取指定类别的素材根据下载量降序-->
+    <select id="listMaterialsByKindIdorderByDownloadCount" resultType="com.share.entity.Material">
+        select
+        <include refid="allColumn"></include>
+        from material
+        where kind_id = #{kindId} and status = 1 and is_checked = 1
+        order by download_count desc
+    </select>
+
+    <!--获取指定类别的素材根据下载量降序，排除指定素材-->
+    <select id="listMaterialsByKindIdorderByDownloadCountExclude" resultType="com.share.entity.Material">
+        select
+        <include refid="allColumn"></include>
+        from material
+        where kind_id = #{kindId} and status = 1 and is_checked = 1 and id != #{mId}
+        order by download_count desc
+    </select>
+
+    <!--根据用户ID查询所有素材-->
+    <select id="listMaterialsByUserId" resultType="com.share.entity.Material">
+        select
+        <include refid="allColumn"></include>
+        from material
+        where user_id = #{uId} and status = 1 and is_checked = 1
+        order by publish_time desc
+    </select>
+
+    <!--素材名称模糊查询-->
+    <select id="listMaterialsByName" resultType="com.share.entity.Material">
+        select
+        <include refid="allColumn"></include>
+        from material
+        where name like concat('%',#{name},'%') and status = 1 and is_checked = 1
+        order by publish_time desc
+    </select>
+
+    <!--根据阅读量排序某个类型下的素材-->
+    <select id="orderByDownloadCount" resultType="com.share.entity.Material">
+        select
+        <include refid="allColumn"></include>
+        from material
+        <where>
+            status = 1 and is_checked = 1
+            <if test="kId != null">
+               and kind_id = #{kId}
+            </if>
+        </where>
+        order by download_count desc
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update material
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

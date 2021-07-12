@@ -1,0 +1,52 @@
+server:
+  servlet:
+    context-path: /su-share
+    session:
+      timeout: 60m
+  tomcat:
+    uri-encoding: UTF-8
+  port: 8081
+
+logging:
+  file:
+    name: log/su-share.log
+  level:
+    root: info
+
+spring:
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/
+  thymeleaf:
+    cache: false
+  datasource:
+    username: root
+    password: 填写此处
+    url: jdbc:mysql://127.0.0.1:3306/su-share?serverTimezone=Hongkong&useAffectedRows=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.mapper.NoticeMapper">
+
+    <!--notice的映射结果集-->
+    <resultMap type="com.share.entity.Notice" id="NoticeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="noticeTime" column="notice_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, content, notice_time </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="content != null and content != ''">
+                content,
+        </if>
+        <if test="noticeTime != null">
+                notice_time,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="content != null and content != ''">
+                #{content},
+        </if>
+        <if test="noticeTime != null">
+                #{noticeTime},
+        </if>
+    </sql>
+    
+    <!--通用对Notice各个属性的值的非空判断，Insert、Update使用-->
+    <sql id="commonsValue">
+        <if test="content != null and content != ''">
+                content = #{content},
+        </if>
+        <if test="noticeTime != null">
+                notice_time = #{noticeTime},
+        </if>
+    </sql>
+    
+        <!--通用对Notice各个属性的值的非空判断,Where查询使用-->
+    <sql id="commonsQuery">
+        <if test="content != null and content != ''">
+                and content = #{content}
+        </if>
+        <if test="noticeTime != null">
+                and notice_time = #{noticeTime}
+        </if>
+    </sql>
+    
+    <!--新增notice:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除notice:通过主键-->
+    <delete id="deleteById">
+        delete from notice
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+    
+    <!--查询单个notice-->
+    <select id="getById" resultMap="NoticeMap">
+        select
+        <include refid="allColumn"></include>
+        from notice
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="listNotices" resultMap="NoticeMap">
+        select
+          <include refid="allColumn"></include>
+        from notice
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsQuery"></include>
+        </trim>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update notice
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

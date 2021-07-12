@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]>
+<html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]>
+<html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>[[${materialVo.material.name}]]-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style>
+        .reply-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="">
+
+<!-- START SITE -->
+<div id="wrapper">
+
+    <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+    <div th:replace="common/bar::#common-header"></div>
+
+    <section class="section single-wrap">
+        <div class="container">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-sx-12 text-center">
+                        <h3 th:text="${materialVo.material.name}"></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-top">
+                <div class="row">
+                    <div class="col-sx-6 col-sm-6">
+                        <div class="custommenu hidden-xs">
+                            <a id="showLeft" href="#" title="" class="bt-menu-trigger"><i class="fa fa-bars"></i> <img
+                                    src="upload/fav.png" alt=""></a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xs-12 cen-xs text-right">
+                        <div class="bread">
+                            <ol class="breadcrumb">
+                                <li><a href="index">首页</a></li>
+                                <li th:if="${materialVo.kind != null}"><a th:href="@{materials(kId=${materialVo.kind.id})}" th:text="${materialVo.kind.name}"></a></li>
+                                <li th:if="${materialVo.kind == null}"><a href="#">未分类</a></li>
+                                <li class="active" th:text="${materialVo.material.name}"></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- end row -->
+            </div><!-- end content top -->
+
+            <div class="row">
+                <div id="singlewrapper" class="col-md-8">
+                    <div class="content-before">
+                        <div class="row">
+                            <div class="col-md-12 col-sx-12 cen-xs">
+                                <div class="dropForm">
+                                    <div class="input-prepend">
+                                        <div class="btn-group">
+                                            <select name="orderby" class="selectpicker" onchange="changeMaterialKind()" id="kId">
+                                                <option th:if="${kId < 1}" value="0">全部</option>
+                                                <option th:if="${kId == kind.id }" th:each="kind:${session.kinds}" th:text="${kind.name}" th:value="${kind.id}"></option>
+                                                <option th:each="kind:${session.kinds}" th:text="${kind.name}" th:value="${kind.id}"></option>
+                                                <option th:if="${kId > 0}" value="0">全部</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" id="search" class="form-control" placeholder="输入关键词搜索">
+                                        <button class="btn btn-primary" onclick="search()" tabindex="-1"><i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end content before -->
+
+                    <div class="content nopad">
+                        <div class="item-single-wrapper">
+                            <div class="item-box">
+                                <div class="item-media text-center">
+                                    <div id="slider" class="flexslider clearfix">
+                                        <ul class="slides">
+                                            <li th:each="img:${materialVo.imgs}"><img th:src="${img}"
+                                                                                      style="width: 800px;height: 600px"
+                                                                                      class="img-responsive"></li>
+                                        </ul>
+                                    </div>
+                                    <div id="carousel" class="flexslider clearfix">
+                                        <ul class="slides">
+                                            <li th:each="img:${materialVo.imgs}"><img th:src="${img}"
+                                                                                      style="width: 80px;height: 60px"
+                                                                                      class="img-responsive"></li>
+                                        </ul>
+                                    </div>
+                                </div><!-- end item-media -->
+
+                                <div class="item-desc">
+                                    [(${materialVo.material.info})]
+                                </div><!-- end item-desc -->
+                            </div><!-- end item-box -->
+                        </div><!-- end item-single-wrapper -->
+                    </div><!-- end content -->
+
+                    <div class="content-after boxs" th:if="${materialVos.size() > 0}">
+                        <div class="row">
+                            <div class="col-md-12 general-title">
+                                <h4>推荐素材<span class="hidden-xs"><a th:href="@{materials(kId=${materialVo.kind.id})}">查看全部</a></span></h4>
+                                <hr>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6" th:each="materialVo:${materialVos}">
+                                <div class="item-box">
+                                    <div class="item-media entry">
+                                        <img th:src="${materialVo.material.img}" alt="" class="img-responsive">
+                                        <div class="magnifier">
+                                            <div class="item-author">
+                                                <a href="public-profile.html"><img th:src="${materialVo.author.img}"
+                                                                                   class="img-circle" alt=""
+                                                                                   th:text="${materialVo.author.name}">
+                                                </a>
+                                            </div><!-- end author -->
+                                        </div>
+                                        <div class="theme__button">
+                                            <p><a th:onclick="downloadMaterial([[${materialVo.material.id}]])"
+                                                  th:title="${'下载量：'+materialVo.material.downloadCount}"><i
+                                                    class="fa fa-download"></i> [[${materialVo.material.downloadCount}]]</a>
+                                            </p>
+                                        </div>
+                                    </div><!-- end item-media -->
+                                    <h4><a th:href="@{material(id=${materialVo.material.id})}"
+                                           th:text="${materialVo.material.name}"></a></h4>
+                                    <small><a href="material.html"><i class="fa fa-eye"></i>
+                                        [[${materialVo.material.readCount}]]</a></small>
+                                    <small><a href="material.html"><i class="fa fa-comment-o"></i>
+                                        [[${materialVo.comments}]]</a></small>
+                                </div><!-- end item-box -->
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end content after -->
+
+                    <div class="content-after boxs" th:if="${commentVos.size() > 0 and session.loginUser != null}">
+                        <div class="row">
+                            <div class="col-md-12 general-title">
+                                <h4>全部评论</h4>
+                                <hr>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <div class="row" style="padding-bottom: 20px">
+                            <div style="display: none" id="reply">
+                                <div class="input-group">
+                                    <input type="text" id="reply-content" class="form-control">
+                                    <input type="hidden" id="replyId">
+                                    <div class="input-group-btn">
+                                        <button style="height: 34px"
+                                                th:onclick="replyComment([[${materialVo.material.id}]])" type="button"
+                                                class="btn btn-success btn-sm">回复
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+
+                            <div th:each="commentVo:${commentVos}">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="#"><img class="media-object" th:src="${commentVo.user.img}"
+                                                         alt="Generic placeholder image"></a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">[[${commentVo.user.name}]]
+                                            <span class="time-comment">
+                                                <small th:text="${#dates.format(commentVo.comment.commentTime,'yyyy-MM-dd HH:mm:ss')}"></small>
+                                                <small>
+                                                    <span th:if="${commentVo.comment.stars == 1}"><i
+                                                            style="color: orange" class="fa fa-star"></i></span>
+                                                    <span th:if="${commentVo.comment.stars == 2}"><i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            style="color: orange" class="fa fa-star"></i></span>
+                                                    <span th:if="${commentVo.comment.stars == 3}"><i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            class="fa fa-star" style="color: orange"></i></span>
+                                                    <span th:if="${commentVo.comment.stars == 4}"><i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            class="fa fa-star" style="color: orange"></i> <i
+                                                            class="fa fa-star" style="color: orange"></i></span>
+                                                    <span th:if="${commentVo.comment.stars == 5}"><i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            style="color: orange" class="fa fa-star"></i> <i
+                                                            class="fa fa-star" style="color: orange"></i> <i
+                                                            class="fa fa-star" style="color: orange"></i> <i
+                                                            class="fa fa-star" style="color: orange"></i></span>
+                                                </small>
+                                                <span class="comment-reply">
+                                                    <a href="javaScript:void(0)" class="btn-danger btn-sm"
+                                                       style="padding: 5px 5px"
+                                                       th:onclick="deleteComment([[${commentVo.comment.id}]])"
+                                                       th:if="${commentVo.user.id == session.loginUser.id or materialVo.author.id == session.loginUser.id}">删除</a>
+                                                    <a href="javaScript:void(0)" class="btn-primary btn-sm"
+                                                       style="padding: 5px 5px"
+                                                       th:onclick="showReply([[${commentVo.comment.id}]],[[${commentVo.user.name}]],[[${commentVo.comment.content}]])">回复</a>
+                                                </span>
+                                            </span><!-- end time-comment -->
+                                        </h4>
+                                        <p th:text="${commentVo.comment.content}"></p>
+                                    </div>
+                                </div><!-- end media -->
+                                <div class="media reply-comment" style="border-radius: 5px"
+                                     th:each="reply:${commentVo.replyComments}">
+                                    <div class="media-left">
+                                        <a href="#"><img class="media-object" th:src="${reply.user.img}"
+                                                         alt="Generic placeholder image"></a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">[[${reply.user.name}]]
+                                            <span class="time-comment">
+                                                <small th:text="${#dates.format(reply.comment.commentTime,'yyyy-MM-dd HH:mm:ss')}"></small>
+                                            </span><!-- end time-comment -->
+                                        </h4>
+                                        <p th:text="${reply.comment.content}"></p>
+                                    </div>
+                                </div><!-- end media -->
+                            </div>
+
+                        </div><!-- end row -->
+                    </div><!-- end content after -->
+
+                    <div class="content-after boxs">
+                        <div class="row">
+                            <div class="col-md-12 general-title">
+                                <h4 th:if="${session.loginUser == null}">请
+                                    <a style="color: blue" href="loginByQQ">登录</a>
+                                    后评论和下载</h4>
+                                <h4 th:if="${session.loginUser != null}">我要评论</h4>
+                                <hr>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <div class="row" th:if="${session.loginUser != null}">
+                            <div class="contact_form">
+                                <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                                    <div class="form-control">
+                                        <div id="function-demo"></div>
+                                        <input type="hidden" value="1" id="starCount">
+                                    </div>
+                                    <textarea class="form-control" style="resize: vertical" id="comment" rows="5"
+                                              placeholder="在此处填写评论信息..."></textarea>
+                                    <button th:onclick="publishComment([[${materialVo.material.id}]])"
+                                            class="btn custombutton button--isi btn-primary"> 提交评论
+                                    </button>
+                                </div>
+                            </div>
+                        </div><!-- end row -->
+                    </div><!-- end content after -->
+                </div><!-- end singlewrapper -->
+
+                <div id="sidebar" class="col-md-4">
+
+                    <div class="boxes boxs">
+                        <div class="item-details">
+                            <table style="width: 100%">
+                                <tr>
+                                    <td>发布于:</td>
+                                    <td th:text="${#dates.format(materialVo.material.publishTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                </tr>
+                                <tr>
+                                    <td>分类:</td>
+                                    <td th:if="${materialVo.kind != null}" th:text="${materialVo.kind.name}"></td>
+                                    <td th:if="${materialVo.kind == null}">未分类</td>
+                                </tr>
+                                <tr>
+                                    <td>扩展名:</td>
+                                    <td th:text="${materialVo.material.extension}"></td>
+                                </tr>
+                                <tr>
+                                    <td>文件名:</td>
+                                    <td th:text="${materialVo.material.name + materialVo.material.extension}"></td>
+                                </tr>
+                                <tr>
+                                    <td>文件大小:</td>
+                                    <td th:text="${materialVo.material.size}"></td>
+                                </tr>
+                                <tr>
+                                    <td>阅读量:</td>
+                                    <td th:text="${materialVo.material.readCount + ' 次'}"></td>
+                                </tr>
+                                <tr>
+                                    <td>下载次数:</td>
+                                    <td th:text="${materialVo.material.downloadCount + ' 次'}"></td>
+                                </tr>
+
+                            </table>
+                        </div><!-- end item-details -->
+                    </div><!-- end boxes -->
+
+                    <div class="boxes boxs">
+                        <div class="desiger-details text-center">
+                            <a th:href="@{home(id=${materialVo.author.id})}"><img th:src="${materialVo.author.img}" class="img-circle" alt=""></a>
+                            <h4><a th:href="@{home(id=${materialVo.author.id})}" th:text="${materialVo.author.name}"></a></h4>
+                            <small>个人说明：[[${materialVo.author.info}]] <br></small>
+                            <small th:if="${materialVo.author.sex== 1}">性别：<i class="fa fa-venus"
+                                                                              style="font-size:12px;color: #1b6d85;font-weight: bold"></i>
+                                <br></small>
+                            <small th:if="${materialVo.author.sex== 0}">性别：<i class="fa fa-mars"
+                                                                              style="font-size:12px;color: deeppink;font-weight: bold"></i>
+                                <br></small>
+                            <small th:text="${'注册时间：'+ #dates.format(materialVo.author.registerTime,'yyyy年MM月dd日 HH:mm:ss')}"> </small>
+                        </div><!-- end designer -->
+                    </div><!-- end boxes -->
+
+                    <div class="boxes boxs">
+                        <div class="item-price text-center">
+                            <p style="font-size: 20px">总体评价</p>
+                            <div class="rating">
+                                    <span th:if="${materialVo.starAvg == null}">
+                                        暂无评分
+                                    </span>
+                                <span th:if="${materialVo.starAvg == 1}">
+                                    <i class="fa fa-star"></i>
+                                </span>
+                                <span th:if="${materialVo.starAvg == 2}">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </span>
+                                <span th:if="${materialVo.starAvg == 3}">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </span>
+                                <span th:if="${materialVo.starAvg == 4}">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </span>
+                                <span th:if="${materialVo.starAvg == 5}">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <small th:if="${session.loginUser != null}">
+                                <a th:onclick="updateFavorite([[${materialVo.material.id}]])" href="javaScript:void(0)">
+                                    <span th:if="${!materialVo.favorite}"><i class="fa fa-heart-o"></i> 添加到收藏夹</span>
+                                    <span th:if="${materialVo.favorite}"><i class="fa fa-heart"></i> 已收藏</span>
+                                </a> &nbsp;
+                                &nbsp;
+                                <hr>
+                            </small>
+                            <button th:if="${session.loginUser != null}" th:onclick="downloadMaterial([[${materialVo.material.id}]])"
+                                    class="btn btn-success"><i class="fa fa-download"
+                                                               style="font-size: 14px;color: white"></i> 下载
+                            </button>
+                            <button th:onclick="shareMaterial([[${materialVo.material.id}]])"
+                                    class="btn btn-primary"><i class="fa fa-share"
+                                                               style="font-size: 14px;color: white"></i> 分享
+                            </button>
+                        </div><!-- end price -->
+                    </div><!-- end boxes -->
+
+                </div><!-- end sidebar -->
+            </div><!-- end row -->
+
+            <div th:replace="common/bar::#common-join"></div>
+        </div><!-- end container -->
+    </section>
+
+    <div th:replace="common/bar::#common-footer"></div>
+</div><!-- end wrapper -->
+<!-- END SITE -->
+
+<script src="js/jquery.min.js"></script>
+<script src="js/xtiper.min.js"></script>
+<script src="js/mycustom.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/custom.js"></script>
+<script src="plugins/star/lib/jquery.raty.min.js"></script>
+<script src="js/flexslider.js"></script>
+<script>
+    $('#function-demo').raty({
+        number: 5,//多少个星星设置
+        score: 1,//初始值是设置
+        targetType: 'number',//类型选择，number是数字值，hint，是设置的数组值
+        path: 'plugins/star/demo/img',
+        cancelOff: 'cancel-off-big.png',
+        cancelOn: 'cancel-on-big.png',
+        size: 24,
+        starHalf: 'star-half-big.png',
+        starOff: 'star-off-big.png',
+        starOn: 'star-on-big.png',
+        cancel: false,
+        targetKeep: true,
+        precision: false,//是否包含小数
+        click: function (score, evt) {
+            $('#starCount').attr("value", score);
+        }
+    });
+
+    (function ($) {
+        "use strict";
+        $(window).load(function () {
+            $('#carousel').flexslider({
+                animation: "slide",
+                controlNav: false,
+                directionNav: false,
+                animationLoop: true,
+                slideshow: true,
+                itemWidth: 92,
+                itemMargin: 0,
+                asNavFor: '#slider'
+            });
+
+            $('#slider').flexslider({
+                animation: "fade",
+                controlNav: false,
+                animationLoop: false,
+                slideshow: true,
+                sync: "#carousel"
+            });
+        });
+    })(jQuery);
+</script>
+
+</body>
+</html>

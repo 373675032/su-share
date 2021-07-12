@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.share.mapper.CommentMapper">
+
+    <!--comment的映射结果集-->
+    <resultMap type="com.share.entity.Comment" id="CommentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="materialId" column="material_id" jdbcType="INTEGER"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="stars" column="stars" jdbcType="INTEGER"/>
+        <result property="replyId" column="reply_id" jdbcType="INTEGER"/>
+        <result property="commentTime" column="comment_time" jdbcType="TIMESTAMP"/>
+        <result property="isFirst" column="is_first" jdbcType="INTEGER"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, user_id, material_id, content, stars, reply_id, comment_time, is_first </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="userId != null">
+                user_id,
+        </if>
+        <if test="materialId != null">
+                material_id,
+        </if>
+        <if test="content != null and content != ''">
+                content,
+        </if>
+        <if test="stars != null">
+                stars,
+        </if>
+        <if test="replyId != null">
+                reply_id,
+        </if>
+        <if test="commentTime != null">
+                comment_time,
+        </if>
+        <if test="isFirst != null">
+                is_first,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="userId != null">
+                #{userId},
+        </if>
+        <if test="materialId != null">
+                #{materialId},
+        </if>
+        <if test="content != null and content != ''">
+                #{content},
+        </if>
+        <if test="stars != null">
+                #{stars},
+        </if>
+        <if test="replyId != null">
+                #{replyId},
+        </if>
+        <if test="commentTime != null">
+                #{commentTime},
+        </if>
+        <if test="isFirst != null">
+                #{isFirst},
+        </if>
+    </sql>
+    
+    <!--通用对Comment各个属性的值的非空判断，Insert、Update使用-->
+    <sql id="commonsValue">
+        <if test="userId != null">
+                user_id = #{userId},
+        </if>
+        <if test="materialId != null">
+                material_id = #{materialId},
+        </if>
+        <if test="content != null and content != ''">
+                content = #{content},
+        </if>
+        <if test="stars != null">
+                stars = #{stars},
+        </if>
+        <if test="replyId != null">
+                reply_id = #{replyId},
+        </if>
+        <if test="commentTime != null">
+                comment_time = #{commentTime},
+        </if>
+        <if test="isFirst != null">
+                is_first = #{isFirst},
+        </if>
+    </sql>
+    
+        <!--通用对Comment各个属性的值的非空判断,Where查询使用-->
+    <sql id="commonsQuery">
+        <if test="userId != null">
+                and user_id = #{userId}
+        </if>
+        <if test="materialId != null">
+                and material_id = #{materialId}
+        </if>
+        <if test="content != null and content != ''">
+                and content = #{content}
+        </if>
+        <if test="stars != null">
+                and stars = #{stars}
+        </if>
+        <if test="replyId != null">
+                and reply_id = #{replyId}
+        </if>
+        <if test="commentTime != null">
+                and comment_time = #{commentTime}
+        </if>
+        <if test="isFirst != null">
+                and is_first = #{isFirst}
+        </if>
+    </sql>
+    
+    <!--新增comment:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除comment:通过主键-->
+    <delete id="deleteById">
+        delete from comment
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <!--删除二级评论-->
+    <delete id="deleteByReplyId">
+        delete from comment
+        <where>
+            reply_id = #{id}
+        </where>
+    </delete>
+
+    <!--删除素材的所有-->
+    <delete id="deleteByMaterialId">
+        delete from comment
+        <where>
+            material_id = #{id}
+        </where>
+    </delete>
+
+    <!--查询单个comment-->
+    <select id="getById" resultMap="CommentMap">
+        select
+        <include refid="allColumn"></include>
+        from comment
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="listComments" resultMap="CommentMap">
+        select
+          <include refid="allColumn"></include>
+        from comment
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsQuery"></include>
+        </trim>
+    </select>
+
+    <!--获取指定素材的一级评论-->
+    <select id="listFirstLevel" resultType="com.share.entity.Comment">
+        select <include refid="allColumn"></include>
+        from comment
+        where material_id = #{mId} and reply_id = 0 order by comment_time desc
+    </select>
+
+    <!--获取指定素材的二级评论-->
+    <select id="listSecondLevel" resultType="com.share.entity.Comment">
+        select <include refid="allColumn"></include>
+        from comment
+        where reply_id = #{id} order by comment_time desc
+    </select>
+
+    <!--获取素材的评价评星数-->
+    <select id="getStarAvg" resultType="java.lang.Integer">
+        SELECT ROUND(avg(stars)) from `comment` WHERE reply_id = 0 and material_id = #{id}
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update comment
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

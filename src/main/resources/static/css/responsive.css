@@ -1,0 +1,45 @@
+@media (min-width: 992px) {
+	  	.yamm-fw {
+	    	position: relative;
+	  	}
+	  	.yamm-fw:hover > ul {
+		    visibility: visible;
+		    opacity: 1;
+		    top: 100%;
+	  	}
+	  	.navbar-nav .yamm-fw ul {
+		    -webkit-transition: visibility 0.35s ease-in-out, opacity 0.35s ease-in-out, top 0.35s ease-in-out, bottom 0.35s ease-in-out, left 0.35s ease-in-out, right 0.35s ease-in-out;
+		    -moz-transition: visibility 0.35s ease-in-out, opacity 0.35s ease-in-out, top 0.35s ease-in-out, bottom 0.35s ease-in-out, left 0.35s ease-in-out, right 0.35s ease-in-out;
+		    -o-transition: visibility 0.35s ease-in-out, opacity 0.35s ease-in-out, top 0.35s ease-in-out, bottom 0.35s ease-in-out, left 0.35s ease-in-out, right 0.35s ease-in-out;
+		    transition: visibility 0.35s ease-in-out, opacity 0.35s ease-in-out, top 0.35s ease-in-out, bottom 0.35s ease-in-out, left 0.35s ease-in-out, right 0.35s ease-in-out;
+	  	}
+		.yamm-fw .dropdown-menu {
+		    min-width: 200px;
+		    -webkit-border-radius: 0;
+		    -moz-border-radius: 0;
+		    border-radius: 0;
+	  	}
+	    .yamm-fw > ul {
+		    position: absolute;
+		    top: 130%;
+		    visibility: hidden;
+		    display: block;
+		    opacity: 0;
+		    left: 0;
+	    }
+	    .yamm-fw > ul.start-right {
+		    right: 0;
+		    left: auto;
+	  	}
+	  	.yamm-fw > ul li {
+	    	position: relative;
+	  	}
+	  	.yamm-fw > ul li:hover > ul {
+		    visibility: visible;
+		    opacity: 1;
+		    left: 100%;
+	  	}
+	    .yamm-fw > ul li:hover > ul.show-right {
+		    right: 100%;
+	  	}
+	}

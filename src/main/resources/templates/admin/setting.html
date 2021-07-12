@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>站点设置-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3>站点设置</h3>
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li><a href="index">首页</a></li>
+                                    <li class="active">站点设置</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content boxs">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+
+                            <div class="row cart-body">
+                                <div class="col-lg-12 col-md-12">
+                                        <!--REVIEW ORDER-->
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <span><i class="fa fa-bell"></i></span> 站点公告（支持HTML）
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <textarea id="notice" onchange="updateNotice()" placeholder="在此处输入网站的公告..." class="col-md-12 form-control" style="height: 100px;resize: none">[[${notice.content}]]</textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" disabled="disabled" class="form-control" th:value="${'最新公告发布于：'+ #dates.format(notice.noticeTime,'yyyy-MM-dd HH:mm:ss')}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--REVIEW ORDER END-->
+
+                                        <!--SHIPPING METHOD-->
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading"><span><i class="fa fa-link"></i></span> 全部链接</div>
+                                            <div class="panel-body">
+                                                <table class="table table-bordered table-hover col-md-12" style="text-align: center">
+                                                    <thead>
+                                                        <tr class="info">
+                                                            <th style="text-align: center;width: 10%">#ID</th>
+                                                            <th style="text-align: center;width: 20%">名称</th>
+                                                            <th style="text-align: center;width: 30%">URL</th>
+                                                            <th style="text-align: center;width: 20%">类型</th>
+                                                            <th style="text-align: center;width: 20%">操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr th:each="link:${links}">
+                                                                <td th:text="${link.id}"></td>
+                                                                <td th:text="${link.name}"></td>
+                                                                <td th:text="${link.targetUrl}"></td>
+                                                                <td th:if="${link.type == 1}">顶部菜单</td>
+                                                                <td th:if="${link.type == 2}">友情链接</td>
+                                                                <td>
+                                                                    <button th:onclick="deleteLink([[${link.id}]])" style="margin-top: 0px;padding: 0px 20px" class="btn btn-link btn-sm">删除</button>
+                                                                </td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                                <hr>
+                                                <button onclick="showAddLink()" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> 添加链接</button>
+                                            </div>
+                                        </div>
+                                        <!--SHIPPING METHOD END-->
+
+                                        <!--CREDIT CART PAYMENT END-->
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading"><span><i class="fa fa-cube"></i></span> 全部分类</div>
+                                            <div class="panel-body">
+                                                <table class="table table-bordered table-hover col-md-12" style="text-align: center">
+                                                    <thead>
+                                                        <tr class="info">
+                                                            <th style="text-align: center;width: 10%">#ID</th>
+                                                            <th style="text-align: center;width: 20%">名称</th>
+                                                            <th style="text-align: center;width: 20%">素材数量</th>
+                                                            <th style="text-align: center;width: 20%">操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr th:each="kind:${kinds}">
+                                                                <td th:text="${kind.id}"></td>
+                                                                <td>
+                                                                    <input th:onchange="updateKind([[${kind.id}]],this)" type="text" class="form-control" th:value="${kind.name}">
+                                                                </td>
+                                                                <td>
+                                                                    此分类共收录
+                                                                    <a style="color: red" th:href="@{materials(kId=${kind.id})}">
+                                                                        【[[${kind.count}]]】
+                                                                    </a>
+                                                                    个素材
+                                                                </td>
+                                                                <td>
+                                                                    <button th:onclick="deleteKind([[${kind.id}]])" style="margin-top: 0px;padding: 0px 20px" class="btn btn-link btn-sm">删除</button>
+                                                                </td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                                <hr>
+                                                <button onclick="showAddKind()" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> 添加分类</button>
+                                            </div>
+                                        </div>
+                                        <!--SHIPPING METHOD END-->
+                                </div>
+                            </div>
+
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div>
+
+                <br>
+
+                <div th:replace="common/bar::#common-join"></div>
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

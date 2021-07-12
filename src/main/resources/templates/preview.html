@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]>
+<html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]>
+<html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>预览-[[${materialVo.material.name}]]-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style>
+        .reply-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="">
+
+<!-- START SITE -->
+<div id="wrapper">
+
+    <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+    <div th:replace="common/bar::#common-header"></div>
+
+    <section class="section single-wrap">
+        <div class="container">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-sx-12 text-center">
+                        <h3 th:text="${'预览 【' + materialVo.material.name +'】'}"></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-top">
+                <div class="row">
+                    <div class="col-sx-6 col-sm-6">
+                        <div class="custommenu hidden-xs">
+                            <a id="showLeft" href="#" title="" class="bt-menu-trigger"><i class="fa fa-bars"></i> <img
+                                    src="upload/fav.png" alt=""></a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xs-12 cen-xs text-right">
+                        <div class="bread">
+                            <ol class="breadcrumb">
+                                <li><a href="index">首页</a></li>
+                                <li th:if="${materialVo.kind != null}"><a href="#" th:text="${materialVo.kind.name}"></a></li>
+                                <li th:if="${materialVo.kind == null}"><a href="#">未分类</a></li>
+                                    <li class="active" th:text="${'预览-' + materialVo.material.name}"></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- end row -->
+            </div><!-- end content top -->
+
+            <div class="row">
+                <div id="singlewrapper" class="col-md-8">
+                    <div class="content-before">
+                        <div class="row">
+                            <div class="col-md-12 col-sx-12 cen-xs">
+                                <form class="dropForm">
+                                    <div class="input-prepend">
+                                        <div class="btn-group">
+                                            <select name="orderby" class="selectpicker">
+                                                <option>搜索全部</option>
+                                                <option>图片</option>
+                                                <option>音频</option>
+                                                <option>视频</option>
+                                                <option>字体</option>
+                                                <option>WordPress主题</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="输入关键词搜索">
+                                        <button class="btn btn-primary" tabindex="-1"><i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end content before -->
+
+                    <div class="content nopad">
+                        <div class="item-single-wrapper">
+                            <div class="item-box">
+                                <div class="item-media text-center">
+                                    <div id="slider" class="flexslider clearfix">
+                                        <ul class="slides">
+                                            <li th:each="img:${materialVo.imgs}">
+                                                <img th:src="${img}" style="width: 800px;height: 600px" class="img-responsive">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div id="carousel" class="flexslider clearfix">
+                                        <ul class="slides">
+                                            <li th:each="img:${materialVo.imgs}">
+                                                <img th:src="${img}" style="width: 80px;height: 60px" class="img-responsive">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div><!-- end item-media -->
+
+                                <div class="item-desc">
+                                    [(${materialVo.material.info})]
+                                </div><!-- end item-desc -->
+                            </div><!-- end item-box -->
+                        </div><!-- end item-single-wrapper -->
+                    </div><!-- end content -->
+
+                </div><!-- end singlewrapper -->
+
+                <div id="sidebar" class="col-md-4">
+
+                    <div class="boxes boxs">
+                        <div class="item-details">
+                            <table style="width: 100%">
+                                <tr>
+                                    <td>发布于:</td>
+                                    <td th:text="${#dates.format(materialVo.material.publishTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                </tr>
+                                <tr>
+                                    <td>分类:</td>
+                                    <td th:if="${materialVo.kind != null}" th:text="${materialVo.kind.name}"></td>
+                                    <td th:if="${materialVo.kind == null}">未分类</td>
+                                </tr>
+                                <tr>
+                                    <td>扩展名:</td>
+                                    <td th:text="${materialVo.material.extension}"></td>
+                                </tr>
+                                <tr>
+                                    <td>文件名:</td>
+                                    <td th:text="${materialVo.material.name + materialVo.material.extension}"></td>
+                                </tr>
+                                <tr>
+                                    <td>文件大小:</td>
+                                    <td th:text="${materialVo.material.size}"></td>
+                                </tr>
+                                <tr>
+                                    <td>阅读量:</td>
+                                    <td th:text="${materialVo.material.readCount + ' 次'}"></td>
+                                </tr>
+                                <tr>
+                                    <td>下载次数:</td>
+                                    <td th:text="${materialVo.material.downloadCount + ' 次'}"></td>
+                                </tr>
+
+                            </table>
+                        </div><!-- end item-details -->
+                    </div><!-- end boxes -->
+
+                    <div class="boxes boxs">
+                        <div class="desiger-details text-center">
+                            <img th:src="${materialVo.author.img}" class="img-circle" alt=""></a>
+                            <h4><a href="public-profile.html" th:text="${materialVo.author.name}"></a></h4>
+                            <small>个人说明：[[${materialVo.author.info}]] <br></small>
+                            <small th:if="${materialVo.author.sex== 1}">性别：<i class="fa fa-venus"
+                                                                              style="font-size:12px;color: #1b6d85;font-weight: bold"></i>
+                                <br></small>
+                            <small th:if="${materialVo.author.sex== 0}">性别：<i class="fa fa-mars"
+                                                                              style="font-size:12px;color: deeppink;font-weight: bold"></i>
+                                <br></small>
+                            <small th:text="${'注册时间：'+ #dates.format(materialVo.author.registerTime,'yyyy年MM月dd日 HH:mm:ss')}"> </small>
+                        </div><!-- end designer -->
+                    </div><!-- end boxes -->
+
+                </div><!-- end sidebar -->
+            </div><!-- end row -->
+
+            <div th:replace="common/bar::#common-join"></div>
+        </div><!-- end container -->
+    </section>
+
+    <div th:replace="common/bar::#common-footer"></div>
+</div><!-- end wrapper -->
+<!-- END SITE -->
+
+<script src="js/jquery.min.js"></script>
+<script src="js/xtiper.min.js"></script>
+<script src="js/mycustom.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/custom.js"></script>
+<script src="plugins/star/lib/jquery.raty.min.js"></script>
+<script src="js/flexslider.js"></script>
+<script>
+    $('#function-demo').raty({
+        number: 5,//多少个星星设置
+        score: 1,//初始值是设置
+        targetType: 'number',//类型选择，number是数字值，hint，是设置的数组值
+        path: 'plugins/star/demo/img',
+        cancelOff: 'cancel-off-big.png',
+        cancelOn: 'cancel-on-big.png',
+        size: 24,
+        starHalf: 'star-half-big.png',
+        starOff: 'star-off-big.png',
+        starOn: 'star-on-big.png',
+        cancel: false,
+        targetKeep: true,
+        precision: false,//是否包含小数
+        click: function (score, evt) {
+            $('#starCount').attr("value", score);
+        }
+    });
+
+    (function ($) {
+        "use strict";
+        $(window).load(function () {
+            $('#carousel').flexslider({
+                animation: "slide",
+                controlNav: false,
+                directionNav: false,
+                animationLoop: true,
+                slideshow: true,
+                itemWidth: 92,
+                itemMargin: 0,
+                asNavFor: '#slider'
+            });
+
+            $('#slider').flexslider({
+                animation: "fade",
+                controlNav: false,
+                animationLoop: false,
+                slideshow: true,
+                sync: "#carousel"
+            });
+        });
+    })(jQuery);
+</script>
+
+</body>
+</html>

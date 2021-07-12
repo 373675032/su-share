@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>个人资料-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3>我的资料</h3>
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li><a href="index">首页</a></li>
+                                    <li class="active">编辑个人资料</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="common/bar::#common-top"></div>
+
+                <div th:replace="common/bar::#common-search"></div>
+
+                <div class="content boxs">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="widget-title">
+                                <h4>编辑我的资料</h4>
+                            </div><!-- end widget-title -->
+                                <div class="space">
+                                    <label>上传头像</label>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-preview thumbnail" style="line-height: 28px;">
+                                            <img th:src="${session.loginUser.img}">
+                                        </div>
+                                        <br>
+                                        <span class="btn btn-primary btn-file">
+                                            <span class="fileupload-new">选择</span>
+                                            <input id="avatar" type="file" onchange="uploadAvatar()">
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="space">
+                                    <label>昵称</label>
+                                    <input id="name" th:value="${session.loginUser.name}" type="text" class="form-control" placeholder="输入你的用户名">
+                                </div>
+
+                                <div class="space">
+                                    <label>个人说明 : </label>
+                                    <textarea id="info" class="form-control" placeholder="编辑你的个人说明，让更多的人记住你..">[[${session.loginUser.info}]]</textarea>
+                                </div>
+
+                                <div class="space">
+                                    <label>性别</label>
+                                    <select class="form-control" id="sex">
+                                        <option th:if="${session.loginUser.sex == 1}" selected value="1">男</option>
+                                        <option th:if="${session.loginUser.sex == 0}" selected value="0">女</option>
+                                        <option th:if="${session.loginUser.sex != 1}" value="1">男</option>
+                                        <option th:if="${session.loginUser.sex != 0}" value="0">女</option>
+                                    </select>
+                                </div>
+
+                                <div class="space">
+                                    <label>用户状态</label>
+                                    <input th:if="${session.loginUser.status == 1}" value="您现在的状态是正常的！" type="text" class="form-control" disabled="disabled">
+                                    <input th:if="${session.loginUser.status == 2}" value="检测你有违规操作，现在您不可上传素材，但可以下载素材。申诉请联系管理员：66666@qq.com" type="text" class="form-control" disabled="disabled">
+                                    <input th:if="${session.loginUser.status == 3}" value="检测你有违规操作，现在您不可上传、下载素材。申诉请联系管理员：66666@qq.com" type="text" class="form-control" disabled="disabled">
+                                </div>
+
+                                <div class="space">
+                                    <label>您的角色</label>
+                                    <input th:if="${session.loginUser.role == 0}" value="普通用户" type="text" class="form-control" disabled="disabled">
+                                    <input th:if="${session.loginUser.role == 1}" value="管理员" type="text" class="form-control" disabled="disabled">
+                                </div>
+
+                                <div class="space">
+                                    <label>注册时间</label>
+                                    <input th:value="${#dates.format(session.loginUser.registerTime,'yyyy年MM月dd日 HH:mm:ss')}" type="text" class="form-control" disabled="disabled">
+                                </div>
+
+                                <div class="space">
+                                    <button onclick="updateProfile()" class="btn btn-primary">更新</button>
+                                </div>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end content -->
+
+                <br>
+
+                <div th:replace="common/bar::#common-join"></div>
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>我的消息-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3 th:if="${type == 0}">未读消息</h3>
+                            <h3 th:if="${type == 1}">已读消息</h3>
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li><a href="index">首页</a></li>
+                                    <li class="active">我的消息</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="common/bar::#common-top"></div>
+
+                <div class="content-before">
+                    <div class="row">
+                        <div class="col-md-10 col-sx-12 cen-xs">
+                            <span class="dropForm">
+                                <div class="input-prepend">
+                                    <div class="btn-group">
+                                        <select class="selectpicker" id="type" onchange="changeMessageType()">
+                                            <option th:if="${type == 0}" value="0">未读消息</option>
+                                            <option th:if="${type == 1}" value="1">已读消息</option>
+                                            <option th:if="${type == 1}" value="0">未读消息</option>
+                                            <option th:if="${type == 0}" value="1">已读消息</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sx-12 cen-xs">
+                            <button th:if="${type == 0}" class="btn-success btn-sm btn" onclick="readAll()"><i class="fa fa-eye"></i> 全部已读</button>
+                            <button th:if="${type == 1}" class="btn-danger btn-sm btn" onclick="deleteAll()"><i class="fa fa-trash"></i> 全部删除</button>
+                        </div>
+                    </div><!-- end row -->
+                </div><!-- end content before -->
+
+                <div class="content boxs">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="storelist panel panel-info">
+                                <div class="panel-body" style="min-height: 200px">
+                                    <h3 th:if="${messageVos.size() == 0}">
+                                        <i class="fa fa-smile-o"></i> 未收到任何消息 ~
+                                    </h3>
+                                    <div th:each="messageVo:${messageVos}">
+                                        <div class="form-group row wow fadeIn" style="visibility: visible;">
+
+                                            <div class="col-sm-1 col-xs-12">
+                                                <a th:if="${messageVo.sender.role == 0}" th:href="@{home(id=${messageVo.sender.id})}">
+                                                    <img alt="" class="img-responsive img-thumbnail" th:src="${messageVo.sender.img}">
+                                                </a>
+                                                <span th:if="${messageVo.sender.role == 1}">
+                                                    <img alt="" class="img-responsive img-thumbnail" src="https://s3.ax1x.com/2020/11/25/Dd9Ic4.png">
+                                                </span>
+                                            </div>
+                                            <div class="col-sm-5 col-xs-12">
+                                                <span>
+                                                    <h4 th:if="${messageVo.material != null}">
+                                                        <a th:href="@{material(id=${messageVo.material.id})}" th:text="${messageVo.material.name}"></a>
+                                                    </h4>
+                                                    <h4 th:if="${messageVo.material == null}">系统通知</h4>
+                                                    <ul>
+                                                        <li style="font-size: 14px">
+                                                            <span style="font-weight: bold" th:if="${messageVo.sender.role == 0}" th:text="${messageVo.sender.name}"></span> [[${messageVo.message.content}]]
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                            <div class="col-sm-3 col-xs-12">
+                                                <h4>时间</h4>
+                                                <ul>
+                                                    <li style="font-size: 14px">
+                                                        <span th:text="${#dates.format(messageVo.message.messageTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-sm-3 col-xs-12 text-center">
+                                                <ul>
+                                                    <li>
+                                                        <button th:if="${type == 0}" th:onclick="readMessage([[${messageVo.message.id}]])" href="single-message.html" class="btn btn-success">已读</button>
+                                                        <button th:onclick="deleteMessage([[${messageVo.message.id}]])" href="#" class="btn btn-danger">移除</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-after text-center boxs" th:if="${messageVos.size() > 0}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav class="pagination-wrapper">
+                                <ul class="pagination">
+                                    <li th:if="${page != 1}">
+                                        <a th:href="@{messages(page=1,type=${type})}" aria-label="Next">
+                                            <span aria-hidden="true">&laquo; 首页</span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${page > 2}"><a th:href="@{messages(page=${page -1},type=${type})}">[[${page-1}]]</a></li>
+                                    <li class="active"><a>[[${page}]]</a></li>
+                                    <li th:if="${page < (totalPage -1)}"><a th:href="@{messages(page=${page +1},type=${type})}">[[${page + 1}]]</a></li>
+                                    <li th:if="${page != totalPage}">
+                                        <a th:href="@{messages(page=${totalPage},type=${type})}" aria-label="Next">
+                                            <span aria-hidden="true">尾页 &raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="disabled">
+                                        <span>共：[[${totalPage}]] 页</span>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div><!-- end row -->
+                </div><!-- end content after -->
+
+                <br>
+
+                <div th:replace="common/bar::#common-join"></div>
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

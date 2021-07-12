@@ -1,0 +1,87 @@
+/******************************************
+	ADD YOUR CUSTOM STYLES HERE
+/******************************************/
+
+/******************************************
+	COLORS
+******************************************/
+
+
+/** blue **/
+
+.pricing-box h3,
+.fun-facts:hover .fun-icon,
+.progress-bar,
+.dropcaps p:first-child:first-letter,
+.flex-direction-nav a,
+.btn-primary,
+.navbar-brand i,
+.theme__button,
+.dropForm .btn-primary {
+    background-color: #1976D2 !important;
+    border-color: #1976D2 !important;
+    color: #ffffff;
+}
+
+.totalprice h4 strong {
+    color: #1976D2 !important;
+}
+
+
+/** yellow **/
+
+.page-404-content h2 span,
+.rating i,
+a:hover,
+.text-widget a,
+a:focus,
+.footer a:hover,
+.footer a:focus,
+.navbar-default .navbar-nav a:focus,
+.navbar-default .navbar-nav a:hover,
+.item-box:hover h4 a,
+.item-price small i,
+.footer .fa-html5,
+.cbp-spmenu h3 i {
+    color: #FFC107 !important;
+}
+
+body.bundle .navbar-default .navbar-brand i,
+div.bbp-template-notice,
+div.indicator-hint,
+div.bbp-template-notice.info,
+.tags a:hover,
+.btn-primary:hover,
+.btn-primary:focus,
+.navbar-brand:hover i,
+.theme__button:hover,
+.pagination > li > a:hover,
+.pagination > li > span:hover {
+    background-color: #FFC107 !important;
+    border-color: #FFC107 !important;
+    color: #ffffff !important;
+}
+
+
+/** grey **/
+
+.btn-default {
+    background-color: #ffffff !important;
+    border-color: #d6d9dc !important;
+}
+
+#bbpress-forums li.bbp-footer,
+#bbpress-forums li.bbp-header,
+#bbpress-forums div.bbp-reply-header,
+#bbpress-forums div.bbp-topic-header,
+#bbpress-forums li.bbp-body ul.forum li.bbp-forum-topic-count,
+#bbpress-forums li.bbp-body ul.forum li.bbp-forum-reply-count,
+.fun-facts .fun-icon,
+.progress,
+.progress-bar span,
+.btn-default:hover,
+.btn-default:focus {
+    background-color: #F6F9FC !important;
+    border-color: #d6d9dc !important;
+    color: #121212 !important;
+}

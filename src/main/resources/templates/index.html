@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>主页-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3>欢迎来到素材分享网</h3>
+                            <p>
+                                [(${notice.content})]
+                                <br>
+                                最新公告发布于：[[${#dates.format(notice.noticeTime,'yyyy年MM月dd日 HH:mm')}]]
+                            </p>
+                            <a href="javaScript:shareIndex()" class="followbtn">立即分享</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="common/bar::#common-top"></div>
+
+                <div th:replace="common/bar::#common-search(kId = 0)"></div>
+
+                <div class="content">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6" th:each="materialVo:${materialVos}">
+                            <div class="item-box">
+                                <div class="item-media entry">
+                                    <a th:href="@{material(id=${materialVo.material.id})}"><img style="height: 180px" th:src="${materialVo.material.img}" alt="" class="img-responsive"></a>
+                                    <div class="magnifier">
+                                        <div class="item-author">
+                                            <a th:href="@{home(id=${materialVo.author.id})}"><img th:src="${materialVo.author.img}" class="img-circle" alt="" th:text="${materialVo.author.name}"> </a>
+                                            <a th:href="@{materials(kId=${materialVo.kind.id})}" th:if="${materialVo.kind != null}" th:text="${' · '+ materialVo.kind.name}"> </a>
+                                            <a th:if="${materialVo.kind == null}">未分类</a>
+                                        </div><!-- end author -->
+                                    </div>
+                                    <div class="theme__button" th:if="${session.loginUser != null}">
+                                        <p><a th:onclick="downloadMaterial([[${materialVo.material.id}]])" th:title="${'下载量：'+materialVo.material.downloadCount}"><i class="fa fa-download"></i> [[${materialVo.material.downloadCount}]]</a></p>
+                                    </div>
+                                </div><!-- end item-media -->
+                                <h4>
+                                    <a th:href="@{material(id=${materialVo.material.id})}" th:text="${materialVo.material.name}"></a>
+                                </h4>
+                                <div class="rating" style="margin-bottom: -8px">
+                                    <span th:if="${materialVo.starAvg == null}">
+                                        暂无评分
+                                    </span>
+                                    <span th:if="${materialVo.starAvg == 1}">
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                    <span th:if="${materialVo.starAvg == 2}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                    <span th:if="${materialVo.starAvg == 3}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                    <span th:if="${materialVo.starAvg == 4}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                    <span th:if="${materialVo.starAvg == 5}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                </div>
+                                <small><a th:href="@{material(id=${materialVo.material.id})}"><i class="fa fa-eye"></i> [[${materialVo.material.readCount}]]</a></small>
+                                <small><a th:href="@{material(id=${materialVo.material.id})}"><i class="fa fa-comment-o"></i> [[${materialVo.comments}]]</a></small>
+                            </div><!-- end item-box -->
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end content -->
+
+                <div class="content-after text-center boxs">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav class="pagination-wrapper">
+                                <ul class="pagination">
+                                    <li th:if="${page != 1}">
+                                        <a th:href="@{index(page=1)}" aria-label="Next">
+                                            <span aria-hidden="true">&laquo; 首页</span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${page > 2}"><a th:href="@{index(page=${page -1})}">[[${page-1}]]</a></li>
+                                    <li class="active"><a>[[${page}]]</a></li>
+                                    <li th:if="${page < (totalPage -1)}"><a th:href="@{index(page=${page +1})}">[[${page + 1}]]</a></li>
+                                    <li th:if="${page != totalPage}">
+                                        <a th:href="@{index(page=${totalPage})}" aria-label="Next">
+                                            <span aria-hidden="true">尾页 &raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="disabled">
+                                        <span>共：[[${totalPage}]] 页</span>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div><!-- end row -->
+
+                    <div class="widget">
+                        <div class="tags">
+                            <a th:href="@{materials(kId=${kind.id})}" style="margin: 0px 5px" th:each="kind:${session.kinds}" th:text="${kind.name}"></a>
+                        </div><!-- end tags -->
+                    </div>
+                </div><!-- end content after -->
+
+                <div th:replace="common/bar::#common-join"></div>
+
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

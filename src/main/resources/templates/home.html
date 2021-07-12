@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>个人主页-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <img th:src="${user.img}" alt="" class="img-circle">
+                            <h3 th:text="${user.name}"></h3>
+                            <p th:text="${user.info}"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-top">
+                    <div class="row">
+                        <div class="col-sx-6 col-sm-6">
+                            <div class="custommenu hidden-xs">
+                                <a id="showLeft" href="#" title="" class="bt-menu-trigger"><i class="fa fa-bars"></i> <img src="upload/fav.png" alt=""></a>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12 cen-xs text-right">
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li class="active">[[${user.name}]] 的个人主页</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- end row -->
+                </div><!-- end content top -->
+
+                <div class="content boxs nopadtop" style="min-height: 300px">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="publicprofile">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#products" aria-controls="products" role="tab" data-toggle="tab">Ta 的素材</a></li>
+                                    <li role="presentation"><a href="#following" aria-controls="following" role="tab" data-toggle="tab">Ta 的收藏</a></li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="products">
+                                        <div class="row">
+                                            <h3 th:if="${materialVos.size() == 0}">
+                                                <i class="fa fa-smile-o"></i> 还未上传过素材～
+                                            </h3>
+                                            <div class="col-md-3 col-sm-6" th:each="materialVo:${materialVos}">
+                                                <div class="item-box">
+                                                    <div class="item-media entry">
+                                                        <img style="height: 180px" th:src="${materialVo.material.img}" alt="" class="img-responsive">
+                                                        <div class="magnifier">
+                                                            <div class="item-author">
+                                                                <a th:href="@{home(id=${materialVo.author.id})}"><img th:src="${materialVo.author.img}" class="img-circle" alt="" th:text="${materialVo.author.name}"> </a>
+                                                                <a th:href="@{materials(kId=${materialVo.kind.id})}" th:if="${materialVo.kind != null}" th:text="${' · '+ materialVo.kind.name}"> </a>
+                                                                <a th:if="${materialVo.kind == null}">未分类</a>
+                                                            </div><!-- end author -->
+                                                        </div>
+                                                        <div class="theme__button" th:if="${session.loginUser != null}">
+                                                            <p><a th:onclick="downloadMaterial([[${materialVo.material.id}]])" th:title="${'下载量：'+materialVo.material.downloadCount}"><i class="fa fa-download"></i> [[${materialVo.material.downloadCount}]]</a></p>
+                                                        </div>
+                                                    </div><!-- end item-media -->
+                                                    <h4>
+                                                        <a th:href="@{material(id=${materialVo.material.id})}" th:text="${materialVo.material.name}"></a>
+                                                    </h4>
+                                                    <div class="rating" style="margin-bottom: -8px">
+                                    <span th:if="${materialVo.starAvg == null}">
+                                        暂无评分
+                                    </span>
+                                                        <span th:if="${materialVo.starAvg == 1}">
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                                        <span th:if="${materialVo.starAvg == 2}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                                        <span th:if="${materialVo.starAvg == 3}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                                        <span th:if="${materialVo.starAvg == 4}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                                        <span th:if="${materialVo.starAvg == 5}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                                    </div>
+                                                    <small><a href="#"><i class="fa fa-eye"></i> [[${materialVo.material.readCount}]]</a></small>
+                                                    <small><a href="#"><i class="fa fa-comment-o"></i> [[${materialVo.comments}]]</a></small>
+                                                </div><!-- end item-box -->
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+                                    </div>
+
+                                    <div role="tabpanel" class="tab-pane" id="following">
+                                        <div class="storelist panel panel-info">
+                                            <div class="panel-body">
+                                                <h3 th:if="${favoriteMaterialVos.size() == 0}">
+                                                    <i class="fa fa-smile-o"></i> 收藏夹空空的～
+                                                </h3>
+                                                <div th:each="materialVo:${favoriteMaterialVos}">
+                                                    <div class="form-group row">
+                                                        <div class="col-md-3 col-xs-12">
+                                                            <img alt="" style="height: 150px;width: 150px" class="img-responsive img-thumbnail" th:src="${materialVo.material.img}">
+                                                        </div>
+                                                        <div class="col-md-3 col-xs-12">
+                                                            <h4><a th:href="@{material(id=${materialVo.material.id})}" th:text="${materialVo.material.name}"></a></h4>
+                                                            <ul>
+                                                                <li>作者 : <a th:href="@{home(id=${materialVo.author.id})}">[[${materialVo.author.name}]]</a></li>
+                                                                <li th:if="${materialVo.kind != null}">分类 : [[${materialVo.kind.name}]]</li>
+                                                                <li th:if="${materialVo.kind == null}">分类 : 未分类</li>
+                                                                <li>大小 : [[${materialVo.material.size}]]</li>
+                                                                <li>日期 : [[${#dates.format(materialVo.material.publishTime,'yyyy-MM-dd HH:mm:ss')}]]</li>
+                                                                <li>扩展名 : [[${materialVo.material.extension}]]</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-4 col-xs-12">
+                                                            <ul class="list-inline">
+                                                                <li th:each="img:${materialVo.imgs}"><img style="height: 50px;width: 100px" class="img-responsive img-thumbnail" th:src="${img}" alt=""></li>
+                                                            </ul>
+                                                        </div><!-- end col -->
+                                                        <div class="col-md-2 col-xs-12 text-center">
+                                                            <ul>
+                                                                <a th:if="${session.loginUser != null}" href="javaScript:void(0)" th:onclick="downloadMaterial([[${materialVo.material.id}]])" th:title="${'下载量：'+materialVo.material.downloadCount}" class="btn btn-success"><i style="color: white" class="fa fa-download"></i></a>
+                                                                <li>
+                                                                    <div class="rating" style="margin-bottom: -8px">
+                                                                        <span th:if="${materialVo.starAvg == null}">
+                                                                            暂无评分
+                                                                        </span>
+                                                                        <span th:if="${materialVo.starAvg == 1}">
+                                                                            <i class="fa fa-star"></i>
+                                                                        </span>
+                                                                        <span th:if="${materialVo.starAvg == 2}">
+                                                                            <i class="fa fa-star"></i>
+                                                                            <i class="fa fa-star"></i>
+                                                                        </span>
+                                                                        <span th:if="${materialVo.starAvg == 3}">
+                                                                            <i class="fa fa-star"></i>
+                                                                            <i class="fa fa-star"></i>
+                                                                            <i class="fa fa-star"></i>
+                                                                        </span>
+                                                                        <span th:if="${materialVo.starAvg == 4}">
+                                                                            <i class="fa fa-star"></i>
+                                                                            <i class="fa fa-star"></i>
+                                                                            <i class="fa fa-star"></i>
+                                                                            <i class="fa fa-star"></i>
+                                                                        </span>
+                                                                        <span th:if="${materialVo.starAvg == 5}">
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star"></i>
+                                                                    </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div><!-- end form-group -->
+                                                    <hr>
+                                                </div>
+                                            </div><!-- end panel-body -->
+                                        </div><!-- end panel -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end content -->
+
+                <div th:replace="common/bar::#common-join"></div>
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

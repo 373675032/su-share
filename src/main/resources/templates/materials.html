@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>空白页-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3 th:if="${search != null}" th:text="${'<' + search + '> 的搜索结果'}"></h3>
+                            <h3 th:if="${kind != null}" th:text="${kind.name}"></h3>
+                            <h3 th:if="${kind == null and search == null}">全部素材</h3>
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li><a href="index">首页</a></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="common/bar::#common-top"></div>
+
+                <div th:replace="common/bar::#common-search(kId = ${kId})"></div>
+
+                <div class="content boxs">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-12">
+                            <div class="storelist panel panel-info">
+                                <div class="panel-body">
+                                    <div th:each="materialVo:${materialVos}">
+                                        <div class="form-group row wow fadeIn">
+                                            <div class="col-sm-2 col-xs-12" style="margin-right: 10px">
+                                                <a th:href="@{material(id=${materialVo.material.id})}"><img alt="" class="img-responsive img-thumbnail" th:src="${materialVo.material.img}"></a>
+                                            </div>
+                                            <div class="col-sm-3 col-xs-12">
+                                                <h4><a th:href="@{material(id=${materialVo.material.id})}" th:text="${materialVo.material.name}"></a></h4>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-user"></i> [[${materialVo.author.name}]]     </a></li>
+                                                    <li><a href="#"><i class="fa fa-cube"></i> [[${materialVo.kind.name}]]</a></li>
+                                                    <li><i class="fa fa-eye"></i> 共浏览 [[${materialVo.material.readCount}]] 次</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-sm-3 col-xs-12">
+                                                <h4>详细</h4>
+                                                <ul>
+                                                    <ul>
+                                                        <li><i class="fa fa-clock-o"></i> [[${#dates.format(materialVo.material.publishTime,'yyyy-MM-dd HH:mm')}]]</li>
+                                                        <li><i class="fa fa-file-o"></i> [[${materialVo.material.extension}]]</li>
+                                                        <li><i class="fa fa-folder-open-o"></i> [[${materialVo.material.size}]]</li>
+                                                    </ul>
+                                                </ul>
+                                            </div>
+                                            <div class="col-sm-3 col-xs-12 text-center">
+                                                <ul>
+                                                    <li th:if="${session.loginUser != null}"><a th:onclick="downloadMaterial([[${materialVo.material.id}]])" th:title="${'下载量：'+materialVo.material.downloadCount}" class="btn btn-success btn-block">下载</a></li>
+                                                    <li><span title="">累计下载 [[${materialVo.material.downloadCount}]] 次</span></li>
+                                                    <li>
+                                                        <div class="rating">
+                                                            <span th:if="${materialVo.starAvg == null}">
+                                                                暂无评分
+                                                            </span>
+                                                            <span th:if="${materialVo.starAvg == 1}">
+                                                                <i class="fa fa-star"></i>
+                                                            </span>
+                                                            <span th:if="${materialVo.starAvg == 2}">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                            </span>
+                                                            <span th:if="${materialVo.starAvg == 3}">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                            </span>
+                                                            <span th:if="${materialVo.starAvg == 4}">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                            </span>
+                                                            <span th:if="${materialVo.starAvg == 5}">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div><!-- end panel-body -->
+                            </div><!-- end storelist -->
+                        </div><!-- end col -->
+
+                        <div id="sidebar" class="col-md-3 col-xs-12">
+
+                            <div class="widget">
+                                <div class="widget-title">
+                                    <h4>最多下载</h4>
+                                </div><!-- end widget-title -->
+
+                                <div class="shopwidget">
+                                    <ul class="shop-list">
+                                        <li th:each="material:${highDownloadMaterials}">
+                                            <div class="alignleft">
+                                                <img th:src="${material.img}" alt="">
+                                            </div><!-- end entry -->
+                                            <h3><a th:href="@{material(id=${material.id})}" th:title="${'下载量：'+ material.downloadCount}" th:text="${material.name}"></a></h3>
+                                            <small>[[${#dates.format(material.publishTime,'yyyy-MM-dd HH:mm')}]]</small>
+                                            <a class="new-price" th:href="@{material(id=${material.id})}">查看详情</a>
+                                            <hr>
+                                        </li>
+                                    </ul><!-- end blog list -->
+                                </div><!-- end blogwidget -->
+                            </div><!-- end widget -->
+
+                            <div class="widget">
+                                <div class="widget-title">
+                                    <h4>分类</h4>
+                                </div><!-- end widget-title -->
+
+                                <ul class="cats">
+                                    <li th:each="kind:${session.kinds}"><a th:href="@{materials(kId=${kind.id})}">[[${kind.name}]] <span>([[${kind.count}]])</span></a></li>
+                                </ul>
+                            </div><!-- end widget -->
+
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end content -->
+
+                <br>
+
+                <div th:replace="common/bar::#common-join"></div>
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns:th="http://www.thymeleaf.org"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- SITE META -->
+    <title>用户管理-素材分享网</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/apple-touch-icon-152x152.png">
+
+    <!-- TEMPLATE STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="grid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="css/xtiper.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    <style>
+        th{
+            text-align: center;
+        }
+    </style>
+
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body class="">
+
+    <!-- START SITE -->
+    <div id="wrapper">
+
+        <div th:replace="common/bar::#cbp-spmenu-s1"></div>
+
+        <div th:replace="common/bar::#common-header"></div>
+
+        <section class="section single-wrap">
+            <div class="container">
+                <div class="page-title public-profile-title">
+                    <div class="row">
+                        <div class="col-sx-12 text-center">
+                            <h3>用户管理</h3>
+                            <div class="bread">
+                                <ol class="breadcrumb">
+                                    <li><a href="index">首页</a></li>
+                                    <li class="active">用户管理</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content boxs">
+                    <div class="row">
+                        <!--定义jqgrid表格标签-->
+                        <table id="userList"></table>
+                        <!--定义分页栏标签-->
+                        <div id="pager"></div>
+                    </div><!-- end row -->
+                </div><!-- end content -->
+            </div><!-- end container -->
+        </section>
+
+        <div th:replace="common/bar::#common-footer"></div>
+    </div><!-- end wrapper -->
+    <!-- END SITE -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="grid/jquery.jqGrid.min.js"></script>
+    <script src="grid/grid.locale-cn.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/xtiper.min.js"></script>
+    <script src="js/mycustom.js"></script>
+    <script>
+        $(function () {
+            // 初始化表格
+            $('#userList').jqGrid({
+                url : "getAllUsers", // 获取数据的地址
+                datatype : "json", // 服务器端返回的数据类型
+                mtype : "GET", // ajax提交方式。POST或者GET，默认GET
+                colNames : ["头像","ID","昵称","密码","性别","个人说明","角色","状态","注册时间"], // 列显示名称，是一个数组对象
+                colModel : [
+                    {editable:false,align:"center",name:"img",sortable: false,width:60,search: false,
+                        /*
+                            cellvalue:当前列的值
+                            options:表格对象
+                            rowObject:当前行的所有值
+                         */
+                        formatter:function(cellvalue, options, rowObject){
+                            return "<img class='img-thumbnail' style='height: 50px' src='"+cellvalue+"'>";
+                        }},
+                    {editable:false,align:"center",name:"id",resizable:false,sortable: false,width:70},
+                    {editable:true,align:"center",name:"name",sortable: false,width: 100},
+                    {editable:true,align:"center",name:"password",sortable: false,width: 100},
+                    {editable:true,align:"center",name:"sex",sortable: false,width:50,search: false,
+                        /*
+                            cellvalue:当前列的值
+                            options:表格对象
+                            rowObject:当前行的所有值
+                         */
+                        formatter:function(cellvalue, options, rowObject){
+                            if (cellvalue == '1'){
+                                return "男";
+                            }else {
+                                return "女";
+                            }
+                        },edittype:"select",
+                        editoptions: {
+                            value : "1:男;0:女"
+                        }},
+                    {editable:true,align:"center",name:"info",search: false,width:200,sortable: false},
+                    {editable:true,align:"center",name:"role",sortable: false,width:100,
+                        /*
+                            cellvalue:当前列的值
+                            options:表格对象
+                            rowObject:当前行的所有值
+                         */
+                        formatter:function(cellvalue, options, rowObject){
+                            if (cellvalue == '1'){
+                                return "管理员";
+                            }else {
+                                return "普通用户";
+                            }
+                        },edittype:"select",
+                        editoptions: {
+                            value : "1:管理员;0:普通用户"
+                        }},
+                    {editable:true,align:"center",name:"status",sortable: false,
+                        /*
+                            cellvalue:当前列的值
+                            options:表格对象
+                            rowObject:当前行的所有值
+                         */
+                        formatter:function(cellvalue, options, rowObject){
+                            if (cellvalue == '1'){
+                                return "<span style='color:green'>正常</span>";
+                            }else if (cellvalue == '2') {
+                                return "<span style='color:red'>不可上传</span>";
+                            }else {
+                                return "<span style='color:red'>不可上传&下载</span>";
+                            }
+                        },edittype:"select",
+                        editoptions: {
+                            value : "1:正常;2:不可上传;3:不可上传&不可下载"
+                        }},
+                    {editable:false,align:"center",name:"registerTime",sortable: false,search: false,
+                        /*
+                            cellvalue:当前列的值
+                            options:表格对象
+                            rowObject:当前行的所有值
+                         */
+                        formatter:function(cellvalue, options, rowObject){
+                            return createTime(cellvalue);
+                        }},
+                ], // 与上面的属性必须成对出现
+                pager : "#pager", // 定义分页工具栏
+                viewrecords : true, // 展示总条数
+                rowNum : 10, // 每页展示的条数,默认20
+                rowList : [5,10,25,50,100,], // 显示下拉列表供用户自定义显示每页条数
+                sortname : "id", // 基于哪列进行排序,改内容会被提交到后台, String sidx 接收
+                styleUI : "Bootstrap", // 指定主题样式
+                hidegrid : false, // 禁用标题旁边的折叠按钮
+                autowidth : true, // 自适应父容器的宽度,铺满屏幕
+                height : 500, // 指定高度,单位px
+                page : 1, // 初始页码
+                pagerpos : "center", // 指定分页工具栏的位置,默认center
+                editurl : "editUser" // 编辑的URL
+            }).navGrid(
+                /*
+                    快速加入编辑功能
+                 */
+                // 参数1: 将快速编辑放入哪个位置
+                "#pager",
+                // 参数2: 展示编辑的配置对象
+                {add:false,edit:true,del:false,search:true,refresh:true},
+                // 参数3: 编辑面板的配置
+                {reloadAfterSubmit: true,closeAfterEdit: true},
+                // 参数4: 添加面板的配置
+                {reloadAfterSubmit: true,closeAfterAdd: true},
+                // 参数5: 删除面板的配置
+                {reloadAfterSubmit: true,closeAfterDelete: true},
+                // 参数6: 搜索面板的配置
+                {reloadAfterSubmit: true,closeAfterSearch: true,sopt:['eq']},
+                // 参数7: 刷新的配置
+                {},
+            );
+        });
+        function createTime(v){
+            var now = new Date(v);
+            var yy = now.getFullYear();      //年
+            var mm = now.getMonth() + 1;     //月
+            var dd = now.getDate();          //日
+            var hh = now.getHours();         //时
+            var ii = now.getMinutes();       //分
+            var ss = now.getSeconds();       //秒
+            var clock = yy + "-";
+            if(mm < 10) clock += "0";
+            clock += mm + "-";
+            if(dd < 10) clock += "0";
+            clock += dd + " ";
+            if(hh < 10) clock += "0";
+            clock += hh + ":";
+            if (ii < 10) clock += '0';
+            clock += ii + ":";
+            if (ss < 10) clock += '0';
+            clock += ss;
+            return clock;
+        }
+    </script>
+</body>
+</html>

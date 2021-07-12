@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公共部分</title>
+</head>
+<body>
+<nav class="hidden-xs cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1" th:if="${session.loginUser != null}">
+    <h3><i class="fa fa-heart"></i> 你最近的收藏</h3>
+    <ul>
+        <li th:each="material:${session.favoriteMaterials}">
+            <img style="height: 60px" th:src="${material.img}" alt="" class="alignleft img-responsive">
+            <h4><a th:href="@{material(id=${material.id})}" th:text="${material.name}"></a></h4>
+            <small><a href="single-item.html"><i class="fa fa-eye"></i> [[${material.readCount}]]</a></small>
+            <small><a href="single-item.html"><i class="fa fa-download"></i> [[${material.downloadCount}]]</a></small>
+        </li>
+    </ul>
+    <a href="favorites" class="btn btn-primary">我的全部收藏</a>
+</nav>
+
+<header class="header" id="common-header">
+    <div class="container-menu">
+        <nav class="navbar navbar-default yamm">
+            <div class="container">
+                <div class="navbar-table">
+                    <div class="navbar-cell">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="index"><i class="fa fa-hashtag"></i> 素材分享网</a>
+                            <div class="open-menu">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="fa fa-bars"></span>
+                                </button>
+                            </div>
+                        </div><!-- end navbar-header -->
+                    </div><!-- end navbar-cell -->
+                    <div class="navbar-cell stretch">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                            <div class="navbar-cell">
+                                <ul class="nav navbar-nav navbar-center">
+                                    <li><a class="active" href="index" title="">主页</a></li>
+                                    <li class="dropdown megamenu yamm-half hovermenu"><a href="#" data-toggle="dropdown" class="dropdown-toggle">全部分类 <b class="fa fa-angle-down"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div class="yamm-content">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-6">
+                                                            <div class="box">
+                                                                <div class="widget" style="margin-bottom: 0px;padding-bottom: 10px">
+                                                                    <ul class="cats">
+                                                                        <li th:each="kind:${session.kinds}"><a th:href="@{materials(kId=${kind.id})}">[[${kind.name}]] <span>（[[${kind.count}]]）</span></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div><!-- end box -->
+                                                        </div><!-- end col -->
+                                                    </div>
+                                                </div><!-- end ttmenu-content -->
+                                            </li>
+                                        </ul>
+                                    </li><!-- end mega menu -->
+                                    <li th:each="link:${session.links}" th:if="${link.type == 1}"><a th:href="@{${link.targetUrl}}" th:title="${link.name}" th:text="${link.name}"></a></li>
+                                    <li><a href="javaScript:feedback()" title="">反馈</a></li>
+                                </ul>
+
+                                <ul class="nav navbar-nav navbar-right" style="margin-top: -5px" th:if="${session.loginUser != null}">
+                                    <li class="dropdown membermenu hovermenu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <img style="width: 35px;height: 35px" th:src="${session.loginUser.img}" alt="" class="img-circle"> <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-header">账户</li>
+                                            <li><a th:href="@{home(id=${session.loginUser.id})}">我的空间</a></li>
+                                            <li><a href="profile">修改资料</a></li>
+                                            <li><a href="password.html">修改密码</a></li>
+                                            <li><a href="logout">退出登录</a></li>
+                                            <li><hr></li>
+                                            <li class="dropdown-header">其他</li>
+                                            <li><a href="favorites">我的收藏</a></li>
+                                            <li><a href="my-material">我的素材</a></li>
+                                            <li><a href="trash">回收站</a></li>
+                                            <li><a href="new">上传素材</a></li>
+                                            <li><a href="messages">我的消息 <span class="label label-danger" th:if="${session.newMessage > 0}" th:text="${session.newMessage}"></span></a></li>
+                                            <li><hr></li>
+                                            <li th:if="${session.loginUser.role == 1}" class="dropdown-header">管理</li>
+                                            <li><a href="audit">审核队列 <span class="label label-danger" th:if="${session.waitAudit > 0 and session.loginUser.role == 1}" th:text="${session.waitAudit}"></span></a></li>
+                                            <li th:if="${session.loginUser.role == 1}"><a href="setting">站点管理</a></li>
+                                            <li th:if="${session.loginUser.role == 1}"><a href="manage-user">用户管理</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <div class="navbar-right" th:if="${session.loginUser == null}">
+                                    <ul class="nav navbar-nav navbar-center">
+                                        <li><a href="login.html">登录</a></li>
+                                        <li><a href="join.html">注册</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end navbar-cell -->
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- end navbar cell -->
+                </div><!-- end navbar-table -->
+            </div><!-- end container fluid -->
+        </nav><!-- end navbar -->
+    </div><!-- end container -->
+</header>
+
+<div class="content-top" id="common-top">
+    <div class="row">
+        <div class="col-sx-6 col-sm-6">
+            <div class="custommenu hidden-xs" th:if="${session.loginUser != null}">
+                <a id="showLeft" href="javaScript:void(0)" title="最近收藏" class="bt-menu-trigger"><i class="fa fa-bars"></i> <img src="upload/fav.png" alt=""></a>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xs-12 cen-xs text-right">
+            <ul class="list-inline social">
+                <li><a id="shareIndex" href="javaScript:shareIndex()" title="分享本站"><i class="fa fa-share"></i></a></li>
+            </ul>
+        </div>
+    </div><!-- end row -->
+</div>
+
+<div class="content-before" id="common-search">
+    <div class="row">
+        <div class="col-md-6 col-sx-12 cen-xs">
+            <div class="dropForm">
+                <div class="input-prepend">
+                    <div class="btn-group">
+                        <select name="orderby" class="selectpicker" onchange="changeMaterialKind()" id="kId">
+                            <option th:if="${kId < 1}" value="0">全部</option>
+                            <option th:if="${kId == kind.id }" th:each="kind:${session.kinds}" th:text="${kind.name}" th:value="${kind.id}"></option>
+                            <option th:each="kind:${session.kinds}" th:text="${kind.name}" th:value="${kind.id}"></option>
+                            <option th:if="${kId > 0}" value="0">全部</option>
+                        </select>
+                    </div>
+                    <input type="text" id="search" class="form-control" placeholder="输入关键词搜索">
+                    <button class="btn btn-primary" onclick="search()" tabindex="-1"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div><!-- end row -->
+</div>
+
+<div class="content-message boxs" id="common-join" th:if="${session.loginUser == null}">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <h2>已经有[[${session.userCount}]]个分享者加入了我们的平台，还在等什么？</h2>
+            <a href="loginByQQ" class="btn btn-default btn-lg">来了来了</a>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" id="common-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-5">
+                <div class="media cen-xs">
+                    <p>
+                        &copy; 2020 素材分享网 | 备案号：XXXXXXX号
+
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-7">
+                <ul class="list-inline text-right cen-xs">
+                    <li th:each="link:${session.links}" th:if="${link.type == 2}"><a th:href="@{${link.targetUrl}}" th:title="${link.name}" th:text="${link.name}"></a></li>
+                    <li><a class="topbutton" href="#">返回顶部 <i class="fa fa-angle-up"></i></a></li>
+                </ul>
+            </div>
+        </div><!-- end row -->
+    </div><!-- end container -->
+</footer>
+</body>
+</html>
